@@ -1,0 +1,30 @@
+{
+	"name": "exinfinite/piwik-linker",
+	"description": "api wraper for piwik",
+	"version": "1.0.0",
+	"type": "library",
+	"license": "LGPL-2.1",
+	"authors": [
+		{
+			"name": "Exinfinite Chen",
+			"email": "chen.min.home@gmail.com",
+			"role": "Developer"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Exinfinite\\PiwikLinker\\": "src/"
+		}
+	},
+	"config": {
+		"process-timeout": 1800,
+		"vendor-dir": "vendors",
+		"optimize-autoloader": true,
+		"sort-packages": true
+	},
+	"minimum-stability": "stable",
+	"require": {
+		"exinfinite/helpers": "^1.3",
+		"spatie/fractalistic": "^2.7"
+	}
+}
