@@ -12,24 +12,34 @@ abstract class Module {
         return "{$this->api}.{$method}";
     }
     protected function request($method, array $params = []) {
+        $ch = curl_init();
+        $query = http_build_query(
+            array_merge([
+                'method' => $this->getApi($method),
+                'module' => 'API',
+                'idSite' => $this->cfg->getIdSite(),
+                'format' => 'JSON',
+                'token_auth' => $this->cfg->getToken(),
+            ], $params)
+        );
+        curl_setopt_array($ch, [
+            CURLOPT_URL => "{$this->cfg->getPaUrl()}?{$query}",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => $this->cfg->getTimeout(),
+        ]);
         try {
-            $ch = curl_init();
-            $query = http_build_query(
-                array_merge([
-                    'method' => $this->getApi($method),
-                    'module' => 'API',
-                    'idSite' => $this->cfg->getIdSite(),
-                    'format' => 'JSON',
-                    'token_auth' => $this->cfg->getToken(),
-                ], $params)
-            );
-            curl_setopt($ch, CURLOPT_URL, "{$this->cfg->getPaUrl()}?{$query}");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $result = curl_exec($ch);
+            if (curl_errno($ch)) {
+                throw new \Exception(curl_error($ch));
+            }
             curl_close($ch);
             return $result;
         } catch (\Exception $e) {
-            return "[]";
+            curl_close($ch);
+            return $this->error($e->getMessage());
         }
+    }
+    protected function error($msg) {
+        return json_encode([]);
     }
 }

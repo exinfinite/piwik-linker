@@ -5,10 +5,19 @@ class Config {
     private $paUrl;
     private $idSite;
     private $token;
-    public function __construct($paUrl, $idSite, $token) {
+    private $timeout;
+    /**
+     *
+     * @param string $paUrl
+     * @param integer $idSite
+     * @param string $token
+     * @param integer $timeout seconds, 0:no limit
+     */
+    public function __construct($paUrl, $idSite, $token, $timeout = 30) {
         $this->paUrl = $paUrl;
-        $this->idSite = $idSite;
+        $this->idSite = (int) $idSite;
         $this->token = $token;
+        $this->timeout = (int) $timeout;
     }
     public function getIdSite() {
         return $this->idSite;
@@ -18,5 +27,8 @@ class Config {
     }
     public function getPaUrl() {
         return $this->paUrl;
+    }
+    public function getTimeout() {
+        return $this->timeout;
     }
 }
